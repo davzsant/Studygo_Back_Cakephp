@@ -1,6 +1,8 @@
 # Project Objective
 This application aims to make studying as engaging and addictive as using social media. It's a fun and interactive way to learn the things you're passionate about.
 
+**Note:** This project is currently under development and is not yet available for use. You can view the project’s progress, but it is not functional at the moment.
+
 # Project Description
 This project is built with CakePHP and comes in two versions:
 1. **API Version**: Designed to connect with a front-end application (available on my GitHub).
