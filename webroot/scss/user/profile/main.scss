@@ -1,0 +1,17 @@
+@import 'user_data';
+@import 'post_wall';
+@import 'text_posts';
+
+.main_profile{
+    display: flex;
+}
+
+.user_profile{
+    display: flex;
+    flex-direction: column;
+}
+
+.user_posts{
+    display: flex;
+    flex-direction: column;
+}

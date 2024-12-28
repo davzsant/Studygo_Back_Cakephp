@@ -1,0 +1,78 @@
+form {
+  width: 100vw;
+  height: 90vh;
+}
+form .fields {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+form .fields > div {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-block: 20px;
+  width: 100%;
+}
+form .fields > div input {
+  width: 36vw;
+  line-height: 1.5;
+  padding: 10px;
+  outline: none;
+  border-radius: 10px;
+  font-size: 18px;
+  border: none;
+  border: 1px solid var(--cor-base);
+  box-shadow: 5px 4px 3px rgba(0, 0, 0, 0.2);
+}
+@media screen and (max-width: 1500px) {
+  form .fields > div input {
+    width: 100%;
+  }
+}
+form .fields > div input:valid ~ label, form .fields > div input:focus ~ label {
+  position: absolute;
+  top: -5px;
+  color: rgb(0, 140, 195);
+  padding-inline: 5px;
+  font-weight: bold;
+  background-color: none;
+}
+form .fields > div label {
+  position: absolute;
+  transition: 0.4s;
+  color: rgb(123, 123, 123);
+  background-color: white;
+  transform: translate(-50%, -50%);
+  left: 9% !important;
+}
+form .fields > div p.message_error {
+  position: absolute;
+  top: 105%;
+  color: red;
+  font-weight: bold;
+}
+form .fields button {
+  padding-inline: 20px;
+  padding-block: 10px;
+  color: white;
+  font-weight: bold;
+  background-color: var(--cor-base);
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+}
+form .fields .redirects {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+}
+form .fields .redirects a {
+  color: var(--cor-base);
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}

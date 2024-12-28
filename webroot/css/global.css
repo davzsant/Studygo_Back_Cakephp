@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@100..900&family=Mona+Sans:ital,wght@0,200..900;1,200..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+:root, body {
+  --cor-base: rgb(0, 140, 195);
+  --cor-base-dark: rgb(0, 110, 154);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  text-wrap: wrap;
+  scrollbar-color: rgb(67, 0, 223) #09001d;
+  scrollbar-width: thin;
+  overflow-wrap: break-word !important;
+  overflow-x: hidden;
+}
+
+.edit_btn {
+  color: rgb(202, 172, 0);
+  background-color: white;
+  border: 1px solid rgb(202, 172, 0);
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.4s;
+  font-weight: bold;
+}
+.edit_btn:hover {
+  background-color: rgb(202, 172, 0);
+  color: white;
+}
+
+.confirm_btn {
+  color: rgb(0, 106, 0);
+  background-color: white;
+  border: 1px solid rgb(0, 106, 0);
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.4s;
+  font-weight: bold;
+}
+.confirm_btn:hover {
+  background-color: rgb(0, 106, 0);
+  color: white;
+}

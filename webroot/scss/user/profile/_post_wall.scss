@@ -1,0 +1,22 @@
+.post_wall{
+    width: calc(40vw - 20px);
+    height: calc(45vh - 20px);
+    padding-top: 10px;
+    margin: 10px;
+    box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.17);
+    border-radius: 8px;
+    border: 1px solid var(--cor-base-dark);
+    padding-inline: 10px;
+    position: relative;
+
+    .wall_title{
+        position: absolute;
+        top:0%;
+        font-size: 30px;
+        font-weight: bolder;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background-color: white;
+        padding-inline: 10px;
+    }
+}

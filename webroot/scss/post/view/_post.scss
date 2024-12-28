@@ -1,0 +1,211 @@
+.post{
+    width: calc(40vw - 40px);
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.13);
+    padding: 20px;
+    margin: auto;
+
+    @media screen and (max-width: 1500px) {
+        width: calc(50vw - 20px);
+    }
+
+    @media screen and (max-width: 1000px) {
+        width: calc(90vw - 20px);
+    }
+
+    .title_container{
+        .main_title{
+            font-size: 20px;
+            text-transform: uppercase;
+            text-align: center;
+            display: flex;
+            overflow-wrap:anywhere;
+            .edit_btn{
+                font-size: 30px;
+            }
+
+            &.creator_view{
+                position: relative;
+                width: 100%;
+
+                h1{
+                    position: relative;
+                    left: -20%;
+                    transition: 0.5s;
+                }
+                button{
+                    position: relative  ;
+                    opacity: 0;
+                    width: 20%;
+                    left: -20%;
+                    transition: 0.5s;
+                }
+
+                &:hover{
+                    h1{
+                        width: 80%;
+                        left: 0%;
+                    }
+
+                    button{
+                        opacity: 1;
+                        left: 0%;
+                    }
+                }
+            }
+        }
+
+
+
+        .edit_title{
+            width: 100%;
+            font-size: 20px;
+
+            button{
+                font-size: 3em;
+                width: 20%;
+            }
+
+            input{
+                width: calc(75% - 20px);
+                padding: 20px;
+                margin-left: 2.5%;
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: 2rem;
+                padding-bottom: 2px;
+                border: none;
+                border-bottom: 2px solid black;
+                outline: none;
+
+            }
+        }
+    }
+
+    .resume_container{
+        border-block: 1px solid var(--cor-base);
+        padding: 10px;
+        margin-block: 20px;
+
+        p{
+            color: rgba(66, 65, 65, 0.795);
+            font-weight: bold;
+            width: 95%;
+        }
+        .main_resume{
+            display: flex;
+
+            button{
+                position: relative;
+                width: 10%;
+                height: 50px;
+                margin-right: 5%;
+                left: -10%;
+                transition: 0.5s;
+                opacity: 0;
+            }
+
+            p{
+                position: relative;
+                left: -10%;
+                transition: 0.5s;
+                width: 85%;
+            }
+
+            &:hover{
+                button{
+                    left: 0%;
+                    opacity: 1;
+                }
+
+                p{
+                    left: 0%;
+                }
+            }
+        }
+
+        .edit_resume{
+            width: 100%;
+            font-size: 20px;
+            position: relative;
+
+            button{
+                position: relative;
+                width: 10%;
+                margin-right: 5%;
+                height: 50px;
+            }
+
+            input{
+                position: relative;
+                width: calc(100% - 20px);
+                padding: 10px;
+                font-size: 20px;
+                color: rgba(66, 65, 65, 0.795);
+                font-weight: bold;
+                border: none;
+                padding-bottom: 3px;
+                border-bottom: 2px solid rgba(66, 65, 65, 0.795);
+                outline: none;
+
+            }
+
+
+        }
+    }
+
+    .body_container{
+        p{
+            font-weight: 500;
+            font-size: 25px;
+        }
+        .main_body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+            font-weight: 500;
+            font-size: 25px;
+            overflow-wrap: anywhere;
+
+
+
+            button{
+                width: 100%;
+                margin-block: 10px;
+                opacity: 0;
+                transition: 0.5s;
+            }
+
+            &:hover{
+                button{
+                    opacity: 1;
+                }
+            }
+
+        }
+        .edit_body{
+            width: 100%;
+
+            textarea{
+                width: calc(100% - 20px);
+                font-weight: 500;
+                resize: vertical;
+                font-size: 20px;
+                color: black;
+                min-height: 300px;
+                padding: 10px;
+                outline: none;
+                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.263);
+                border: 1px solid rgba(163, 163, 163, 0.658);
+                border-radius: 8px;
+                font-family: 'Montserrat', sans-serif;
+                margin-bottom: 10px;
+            }
+
+            button{
+                width: 100%;
+            }
+        }
+    }
+}
