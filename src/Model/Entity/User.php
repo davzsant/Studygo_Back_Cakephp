@@ -11,15 +11,16 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $name
  * @property string $username
- * @property string|null $email
- * @property \Cake\I18n\DateTime|null $birth
- * @property string|null $gender
- * @property \Cake\I18n\DateTime|null $created
- * @property string|null $description
- * @property string|null $usercol
+ * @property string $email
+ * @property \Cake\I18n\DateTime $created
  * @property string $password
+ * @property string $description
+ * @property \Cake\I18n\DateTime $birth
+ * @property int|null $two_steps
  *
+ * @property \App\Model\Entity\Follower[] $follower
  * @property \App\Model\Entity\Post[] $post
+ * @property \App\Model\Entity\Follower[] $followed
  */
 class User extends Entity
 {
@@ -36,14 +37,14 @@ class User extends Entity
         'name' => true,
         'username' => true,
         'email' => true,
-        'birth' => true,
-        'gender' => true,
         'created' => true,
-        'description' => true,
-        'usercol' => true,
         'password' => true,
+        'description' => true,
+        'birth' => true,
+        'two_steps' => true,
+        'follower' => true,
         'post' => true,
-        'follower' => true
+        'followed' => true,
     ];
 
     /**

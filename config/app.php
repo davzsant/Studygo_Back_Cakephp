@@ -245,7 +245,8 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'you@localhost',
+            'from' => 'david.lucas.santiago02@gmail.com',
+            'log' => true
             /*
              * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
              */

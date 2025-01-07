@@ -24,7 +24,7 @@ class PostController extends AppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        $this->Authentication->addUnauthenticatedActions(['index', 'view']);
+        $this->Authentication->addUnauthenticatedActions(['index']);
     }
     /**
      * Retorna Posts para o usuario visualizar
@@ -44,5 +44,57 @@ class PostController extends AppController
             'data' => $all_posts
         ]));
 
+    }
+
+    public function view($id)
+    {
+        $post = $this->getTableLocator()->get('Post')
+            ->find('all')->where(['Post.id' => $id])
+            ->contain(['User' => ['Follower','Followed']])->first();
+
+            return $this->response
+            ->withType('application/json')
+            ->withStringBody(json_encode([
+                'success' => true,
+                'data' => $post
+            ]));
+    }
+
+    public function add()
+    {
+
+        $data = $this->request->getData();
+        $post_table = $this->getTableLocator()->get('post');
+        $post = $post_table->newEmptyEntity();
+        $post = $post_table->patchEntity($post,$data);
+        if(!$post_table->save($post))
+        {
+            $errors = $post->getErrors();
+
+            // Transformar os erros em uma única string
+            $errorMessages = [];
+            foreach ($errors as $field => $fieldErrors) {
+                foreach ($fieldErrors as $error) {
+                    $errorMessages[] = ucfirst($field) . ': ' . $error;
+                }
+            }
+
+            // Juntar os erros em uma única string
+            $allErrors = implode('; ', $errorMessages);
+            return $this->response
+            ->withType('application/json')
+            ->withStringBody(json_encode([
+                'success' => false,
+                'message' => $allErrors
+            ]));
+        }
+
+        return $this->response
+            ->withType('application/json')
+            ->withStatus(201)
+            ->withStringBody(json_encode([
+                'success' => true,
+                'message' => "Post criado com sucesso"
+            ]));
     }
 }

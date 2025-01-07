@@ -63,13 +63,14 @@ require CAKE . 'functions.php';
  * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
  * for more information for recommended practices.
 */
-// if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
-//     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
-//     $dotenv->parse()
-//         ->putenv()
-//         ->toEnv()
-//         ->toServer();
-// }
+if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
+    $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+    $dotenv->parse()
+        ->skipExisting()
+        ->putenv()
+        ->toEnv()
+        ->toServer();
+ }
 
 /*
  * Read configuration file and inject configuration into various
@@ -188,40 +189,11 @@ ServerRequest::addDetector('tablet', function ($request) {
     return $detector->isTablet();
 });
 
-/*
- * You can enable default locale format parsing by adding calls
- * to `useLocaleParser()`. This enables the automatic conversion of
- * locale specific date formats. For details see
- * @link https://book.cakephp.org/5/en/core-libraries/internationalization-and-localization.html#parsing-localized-datetime-data
- */
-// \Cake\Database\TypeFactory::build('time')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('date')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('datetime')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('timestamp')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('datetimefractional')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('timestampfractional')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('datetimetimezone')
-//    ->useLocaleParser();
-// \Cake\Database\TypeFactory::build('timestamptimezone')
-//    ->useLocaleParser();
+use Authentication\AuthenticationService;
 
-/*
- * Custom Inflector rules, can be set to correctly pluralize or singularize
- * table, model, controller names or whatever other string is passed to the
- * inflection functions.
- */
-//Inflector::rules('plural', ['/^(inflect)or$/i' => '\1ables']);
-//Inflector::rules('irregular', ['red' => 'redlings']);
-//Inflector::rules('uninflected', ['dontinflectme']);
-
-// set a custom date and time format
-// see https://book.cakephp.org/5/en/core-libraries/time.html#setting-the-default-locale-and-format-string
-// and https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax
-//\Cake\I18n\Date::setToStringFormat('dd.MM.yyyy');
-//\Cake\I18n\Time::setToStringFormat('dd.MM.yyyy HH:mm');
+$service = new AuthenticationService();
+$service->loadIdentifier('Authentication.JwtSubject');
+$service->loadAuthenticator('Authentication.Jwt', [
+    'secretKey' => env('JWT_KEY'),
+    'algorithm' => 'HS256',
+]);

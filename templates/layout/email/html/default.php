@@ -20,6 +20,7 @@
     <title><?= $this->fetch('title') ?></title>
 </head>
 <body>
+    <h1>STUDYGO</h1>
     <?= $this->fetch('content') ?>
 </body>
 </html>

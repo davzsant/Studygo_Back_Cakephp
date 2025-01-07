@@ -84,7 +84,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
 
-            ->add(new CorsMiddleware()) // Adicione o middleware CORS AQUI
+            ->add(CorsMiddleware::class) // Adicione o middleware CORS AQUI
 
             // Add routing middleware.
             // If you have a large number of routes connected, turning on routes
@@ -95,15 +95,22 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // Parse various types of encoded request bodies so that they are
             // available as array through $request->getData()
             // https://book.cakephp.org/5/en/controllers/middleware.html#body-parser-middleware
-            ->add(new BodyParserMiddleware())
+            ->add(new BodyParserMiddleware());
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/5/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
-            ->add(new CsrfProtectionMiddleware([
-                'httponly' => true,
-            ]))
+            $csrf = new CsrfProtectionMiddleware([
+                'httponly' => true
+            ]);
+            $csrf->skipCheckCallback(function ($request){
+                $path = $request->getPath();
+                return str_contains($path,"/api/");
+            });
+
+            $middlewareQueue->add($csrf)
 
             ->add(new AuthenticationMiddleware($this));
+
 
         return $middlewareQueue;
     }
@@ -123,42 +130,26 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     {
         $service = new AuthenticationService();
 
-        //Configurção para usuarios que não estão autenticados
-        $service->setConfig([
-            'unauthenticatedRedirect' => Router::url([
-                'prefix' => false,
-                'plugin' => null,
-                'controller' => 'User',
-                'action' => 'login'
-            ]),
-            'queryParam' => 'redirect'
+        // Configurar o autenticador JWT
+        $service->loadAuthenticator('Authentication.Jwt', [
+            'secretKey' => env('JWT_KEY'), // Chave secreta
+            'algorithm' => 'HS256', // Algoritmo do JWT
+            'header' => 'Authorization', // Cabeçalho da requisição onde o token estará
+            'tokenPrefix' => 'Bearer', // Prefixo usado no token (geralmente 'Bearer')
         ]);
 
-        $fields = [
-            AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
-            AbstractIdentifier::CREDENTIAL_PASSWORD => 'password'
-        ];
-
+        // Carregar o identificador de autenticação baseado em senha
         $service->loadIdentifier('Authentication.Password', [
-            'fields' => $fields,
+            'fields' => [
+                'username' => 'email', // ou 'username' dependendo do campo
+                'password' => 'password',
+            ],
             'resolver' => [
                 'className' => 'Authentication.Orm',
-                'userModel' => 'User', // Substitua "Accounts" pelo alias correto
-            ],
+                'userModel' => 'Users'
+            ]
         ]);
 
-        $service->loadAuthenticator('Authentication.Session');
-        $service->loadAuthenticator('Authentication.Form',[
-            'fields' => $fields,
-            'loginUrl' => Router::url([
-                'prefix' => false,
-                'plugin' => null,
-                'controller' => 'User',
-                'action' => 'login'
-            ])
-            ]);
-
-        $service->loadIdentifier('Authentication.Password',compact('fields'));
         return $service;
     }
 }

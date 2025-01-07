@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
 /**
  * User Model
  *
+ * @property \App\Model\Table\FollowerTable&\Cake\ORM\Association\HasMany $Follower
  * @property \App\Model\Table\PostTable&\Cake\ORM\Association\HasMany $Post
  *
  * @method \App\Model\Entity\User newEmptyEntity()
@@ -53,13 +54,11 @@ class UserTable extends Table
         $this->hasMany('Post', [
             'foreignKey' => 'user_id',
         ]);
+
         $this->hasMany('Followed',[
             'foreignKey' => 'follower_id',
             'className' => 'Follower'
         ]);
-
-
-
     }
 
     /**
@@ -72,44 +71,40 @@ class UserTable extends Table
     {
         $validator
             ->scalar('name')
-            ->maxLength('name', 45)
+            ->maxLength('name', 100)
             ->requirePresence('name', 'create')
             ->notEmptyString('name');
 
         $validator
             ->scalar('username')
-            ->maxLength('username', 25)
+            ->maxLength('username', 100)
             ->requirePresence('username', 'create')
             ->notEmptyString('username');
 
         $validator
             ->email('email')
-            ->allowEmptyString('email');
-
-        $validator
-            ->dateTime('birth')
-            ->allowEmptyDateTime('birth');
-
-        $validator
-            ->scalar('gender')
-            ->maxLength('gender', 16777215)
-            ->allowEmptyString('gender');
-
-        $validator
-            ->scalar('description')
-            ->maxLength('description', 300)
-            ->allowEmptyString('description');
-
-        $validator
-            ->scalar('usercol')
-            ->maxLength('usercol', 45)
-            ->allowEmptyString('usercol');
+            ->requirePresence('email', 'create')
+            ->notEmptyString('email');
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 150)
+            ->maxLength('password', 255)
             ->requirePresence('password', 'create')
             ->notEmptyString('password');
+
+        $validator
+            ->scalar('description')
+            ->maxLength('description', 255)
+            ->requirePresence('description', 'create')
+            ->notEmptyString('description');
+
+        $validator
+            ->dateTime('birth')
+            ->requirePresence('birth', 'create')
+            ->notEmptyDateTime('birth');
+
+        $validator
+            ->allowEmptyString('two_steps');
 
         return $validator;
     }

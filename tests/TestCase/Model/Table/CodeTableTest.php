@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\UserTable;
+use App\Model\Table\CodeTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\UserTable Test Case
+ * App\Model\Table\CodeTable Test Case
  */
-class UserTableTest extends TestCase
+class CodeTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\UserTable
+     * @var \App\Model\Table\CodeTable
      */
-    protected $User;
+    protected $Code;
 
     /**
      * Fixtures
@@ -24,10 +24,8 @@ class UserTableTest extends TestCase
      * @var list<string>
      */
     protected array $fixtures = [
+        'app.Code',
         'app.User',
-        'app.Follower',
-        'app.Post',
-        'app.Followed',
     ];
 
     /**
@@ -38,8 +36,8 @@ class UserTableTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('User') ? [] : ['className' => UserTable::class];
-        $this->User = $this->getTableLocator()->get('User', $config);
+        $config = $this->getTableLocator()->exists('Code') ? [] : ['className' => CodeTable::class];
+        $this->Code = $this->getTableLocator()->get('Code', $config);
     }
 
     /**
@@ -49,7 +47,7 @@ class UserTableTest extends TestCase
      */
     protected function tearDown(): void
     {
-        unset($this->User);
+        unset($this->Code);
 
         parent::tearDown();
     }
@@ -58,7 +56,7 @@ class UserTableTest extends TestCase
      * Test validationDefault method
      *
      * @return void
-     * @uses \App\Model\Table\UserTable::validationDefault()
+     * @uses \App\Model\Table\CodeTable::validationDefault()
      */
     public function testValidationDefault(): void
     {
@@ -69,7 +67,7 @@ class UserTableTest extends TestCase
      * Test buildRules method
      *
      * @return void
-     * @uses \App\Model\Table\UserTable::buildRules()
+     * @uses \App\Model\Table\CodeTable::buildRules()
      */
     public function testBuildRules(): void
     {
