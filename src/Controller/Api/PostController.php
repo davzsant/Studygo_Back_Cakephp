@@ -62,6 +62,7 @@ class PostController extends AppController
 
     public function add()
     {
+        $this->request->allowMethod(['POST','OPTIONS']);
 
         $data = $this->request->getData();
         $post_table = $this->getTableLocator()->get('post');
