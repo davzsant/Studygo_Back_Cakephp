@@ -12,7 +12,7 @@ class PostController extends AppController
     {
         $this->loadComponent('CreatePost');
         $this->loadComponent('Authentication.Authentication');
-        $this->Authentication->allowUnauthenticated(['index','view']);
+        $this->Authentication->allowUnauthenticated(['index']);
     }
     public function index()
     {

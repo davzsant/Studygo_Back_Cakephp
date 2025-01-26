@@ -77,6 +77,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
+            ->add(CorsMiddleware::class) // Adicione o middleware CORS AQUI
             ->add(new ErrorHandlerMiddleware(Configure::read('Error'), $this))
 
             // Handle plugin/theme assets like CakePHP normally does.
@@ -84,7 +85,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
 
-            ->add(CorsMiddleware::class) // Adicione o middleware CORS AQUI
 
             // Add routing middleware.
             // If you have a large number of routes connected, turning on routes

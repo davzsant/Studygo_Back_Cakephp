@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 use App\Controller\AppController;
 use Cake\I18n\FrozenTime;
+use Exception;
 use Firebase\JWT\JWT;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\Core\Configure;
@@ -79,7 +80,7 @@ class UserController extends AppController
                 ->withType('application/json')
                 ->withStatus(400)
                 ->withStringBody(json_encode([
-                    'sucess' => false,
+                    'success' => false,
                     'message' => 'Problema no envio do Codigo',
                 ]));
             }
@@ -87,7 +88,7 @@ class UserController extends AppController
                 ->withType('application/json')
                 ->withStatus(200)
                 ->withStringBody(json_encode([
-                    'sucess' => true,
+                    'success' => true,
                     'message' => 'Codigo enviado',
                     'nextStep' => true,
                     'userId' => $user->id
@@ -98,7 +99,7 @@ class UserController extends AppController
             ->withType('application/json')
             ->withStatus(200)
             ->withStringBody(json_encode([
-                'sucess' => true,
+                'success' => true,
                 'message' => 'Login Bem Sucedido',
                 'user_id' => $user->id,
                 'token' => $jwt
@@ -140,66 +141,77 @@ class UserController extends AppController
 
     public function verifyCode()
     {
-        $this->request->allowMethod(['POST','OPTIONS']);
-        $data = (object)$this->request->getData();
+        try{
 
-        if(empty($data))
+            $data = (object)$this->request->getData();
+
+            if(empty($data))
+            {
+                return $this->response
+                ->withType('application/json')
+                ->withStatus(400)
+                ->withStringBody(json_encode([
+                    'sucess' => false,
+                    'message' => 'É Necessario enviar dados de autenticacao',
+                ]));
+            }
+            $user = $this->getTableLocator()->get('user')->find()->where(['User.id' => $data->user_id])->first();
+            $code_table = $this->getTableLocator()->get('code');
+            $code = $code_table->find()
+                ->where(['user_id' => $data->user_id,'expires >' => FrozenTime::now()])->orderByDesc('created')->first();
+
+            if(empty($code))
+            {
+                return $this->response
+                ->withType('application/json')
+                ->withStatus(200)
+                ->withStringBody(json_encode([
+                    'sucess' => false,
+                    'message' => 'Nenhum token valido informado',
+                ]));
+            }
+
+            if($code->code !== $data->user_code)
+            {
+                return $this->response
+                ->withType('application/json')
+                ->withStatus(200)
+                ->withStringBody(json_encode([
+                    'sucess' => false,
+                    'message' => 'Codigo Invalido',
+                ]));
+            }
+
+            $issuedAt = time();
+            $expirationTime = $issuedAt + 7776000; //Expira em 90 dias
+            $payload = [
+                'iat' => $issuedAt,
+                'exp' => $expirationTime,
+                'sub' => $user->id,
+                'username' => $user->username
+            ];
+
+            $jwt = JWT::encode($payload,Configure::read('Security.jwtKey'), 'HS256');
+
+            return $this->response
+                ->withType('application/json')
+                ->withStatus(200)
+                ->withStringBody(json_encode([
+                    'success' => true,
+                    'message' => 'Autenticado',
+                    'token' => $jwt,
+                    'user_id' => $user->id,
+                ]));
+        }catch(Exception $error)
         {
             return $this->response
             ->withType('application/json')
-            ->withStatus(400)
+            ->withStatus(500)
             ->withStringBody(json_encode([
-                'sucess' => false,
-                'message' => 'É Necessario enviar dados de autenticacao',
+                'success' => false,
+                'message' => "Houve um problema interno:".$error->getMessage(),
             ]));
         }
-        $user = $this->getTableLocator()->get('user')->find()->where(['User.id' => $data->user_id])->first();
-        $code_table = $this->getTableLocator()->get('code');
-        $code = $code_table->find()
-            ->where(['user_id' => $data->user_id,'expires >' => FrozenTime::now()])->orderByDesc('created')->first();
-
-        if(empty($code))
-        {
-            return $this->response
-            ->withType('application/json')
-            ->withStatus(200)
-            ->withStringBody(json_encode([
-                'sucess' => false,
-                'message' => 'Nenhum token valido informado',
-            ]));
-        }
-
-        if($code->code !== $data->user_code)
-        {
-            return $this->response
-            ->withType('application/json')
-            ->withStatus(200)
-            ->withStringBody(json_encode([
-                'sucess' => false,
-                'message' => 'Codigo Invalido',
-            ]));
-        }
-
-        $issuedAt = time();
-        $expirationTime = $issuedAt + 7776000; //Expira em 90 dias
-        $payload = [
-            'iat' => $issuedAt,
-            'exp' => $expirationTime,
-            'sub' => $user->id,
-            'username' => $user->username
-        ];
-
-        $jwt = JWT::encode($payload,Configure::read('Security.jwtKey'), 'HS256');
-
-        return $this->response
-            ->withType('application/json')
-            ->withStatus(200)
-            ->withStringBody(json_encode([
-                'sucess' => true,
-                'message' => 'Autenticado',
-                'token' => $jwt,
-                'user_id' => $user->id,
-            ]));
     }
 
 

@@ -14,7 +14,6 @@ class PostController extends AppController
     public function viewClasses(): array
     {
         return [JsonView::class];
-
     }
     public function initialize(): void
     {
@@ -56,13 +55,12 @@ class PostController extends AppController
             ->withType('application/json')
             ->withStringBody(json_encode([
                 'success' => true,
-                'data' => $post
+                'post' => $post
             ]));
     }
 
     public function add()
     {
-        $this->request->allowMethod(['POST','OPTIONS']);
 
         $data = $this->request->getData();
         $post_table = $this->getTableLocator()->get('post');
